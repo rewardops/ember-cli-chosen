@@ -239,24 +239,27 @@ export default Ember.Component.extend({
    * 
    */
   afterRenderEvent: function () {
-    var options = this.get('_options'),
-      alreadyInitialized = this.get('_chosenInitialized');
+    // Only run setup if the element exists.
+    if (this.$()) {
+      var options = this.get('_options'),
+        alreadyInitialized = this.get('_chosenInitialized');
 
-    if (alreadyInitialized) {
-      this._unsubscribeFromChosenEvents(this.$());
+      if (alreadyInitialized) {
+        this._unsubscribeFromChosenEvents(this.$());
+      }
+
+      this._setInitialSelectionValue();
+
+      // Initialize chosen 
+      var chosenElement = this.$().chosen(options);
+      this._subscribeToChosenEvents(chosenElement);
+
+      if (alreadyInitialized) {
+        this.$().trigger('chosen:updated');
+      }
+
+      this.set('_chosenInitialized', true);
     }
-
-    this._setInitialSelectionValue();
-
-    // Initialize chosen 
-    var chosenElement = this.$().chosen(options);
-    this._subscribeToChosenEvents(chosenElement);
-
-    if (alreadyInitialized) {
-      this.$().trigger('chosen:updated');
-    }
-
-    this.set('_chosenInitialized', true);
   },
 
   /**
