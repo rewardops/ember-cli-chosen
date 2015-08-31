@@ -1,8 +1,8 @@
 /* jshint node: true */
 'use strict';
 
-var pickFiles     = require('broccoli-static-compiler');
-var merge         = require('lodash.merge');
+var Funnel  = require('broccoli-funnel');
+var merge   = require('lodash.merge');
 
 module.exports = {
   name: 'ember-cli-chosen',
@@ -31,7 +31,7 @@ module.exports = {
 
     // Only include the Chosen sprites if we're including Chosen CSS in the build
     if(this.app.options['ember-cli-chosen'].importChosenCSS) {
-      tree = pickFiles(this.app.bowerDirectory + '/chosen', {
+      tree = Funnel(this.app.bowerDirectory + '/chosen', {
         srcDir: '/',
         files: ['*.png'],
         destDir: '/assets'
